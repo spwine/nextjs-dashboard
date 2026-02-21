@@ -34,9 +34,9 @@ const UpdateInvoice = FormSchema.omit({ id: true, date: true });
 // Update the signature to include prevState
 export async function updateInvoice(
   id: string,
-  prevState: State, // This is the missing piece
+  prevState: State,
   formData: FormData,
-) {
+): Promise<State> {
   const { customerId, amount, status } = UpdateInvoice.parse({
     customerId: formData.get("customerId"),
     amount: formData.get("amount"),
@@ -53,8 +53,10 @@ export async function updateInvoice(
     `;
   } catch (error) {
     console.error(error);
+    // Ensure this returned object matches your 'State' type completely!
     return {
       message: "Database error occurred while updating the invoice.",
+      error: {}, // Added this to match your initialState structure
     };
   }
 
